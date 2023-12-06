@@ -16,7 +16,7 @@ function FormBody() {
   const styles = Styles();
   const imageRef = useRef(null);
   const [addEnable, setAddEnable] = useState(false);
-  const [formData, setFormData] = useState({
+  const [ formData, setFormData] = useState({
     name: "",
     gender: "",
     dob: "",
