@@ -1,28 +1,117 @@
 import { useState } from "react";
 import {
+  Box,
   Button,
+  Grid,
   Modal,
   Paper,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import FormBody from "./Form";
+import Table from "@mui/joy/Table";
+import Sheet from "@mui/joy/Sheet";
+import { useSelector } from "react-redux";
+import { Avatars } from "./Constants";
+import moment from "moment";
 
 function App() {
   const [modalToggle, setModalToggle] = useState(false);
+  const data = useSelector((state) => state.childrenDetails.childrenDetails);
 
   function addChild() {
     setModalToggle(!modalToggle);
   }
   return (
-    <Paper style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      width: "100vw",
-      height: "100vh",
-    }}>
-      <Button variant="contained" onClick={addChild}>
-        Add child
-      </Button>
+    <Paper
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
+      <Grid md={12} width={"100%"} height={"100%"}>
+        <Grid
+          md={12}
+          sx={{ height: "15%", width: "100%", p: 2, alignItems: "center" }}
+          display="flex"
+        >
+          <Box component={"div"} sx={{ width: { md: "80%", xs: "100%" } }}>
+            Header
+          </Box>
+          <Button
+            variant="contained"
+            onClick={addChild}
+            sx={{ width: { md: "20%", xs: "50%" }, height: 50 }}
+          >
+            Add child
+          </Button>
+        </Grid>
+        <Grid md={12} sx={{ height: "85%", width: "100%", p: 2 }}>
+          <Sheet sx={{ height: "90%", overflow: "auto" }}>
+            <Table
+              aria-label="table with sticky header"
+              stickyHeader
+              stickyFooter
+              stripe="even"
+              hoverRow
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell>Sl No.</TableCell>
+                  <TableCell>Avatar</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Gender</TableCell>
+                  <TableCell>Medical Info</TableCell>
+                  <TableCell>DOB</TableCell>
+                  <TableCell>Address</TableCell>
+                  <TableCell>City</TableCell>
+                  <TableCell>Country</TableCell>
+                  <TableCell>QR</TableCell>
+                </TableRow>
+              </TableHead>
+              {data.length ? (
+                <TableBody>
+                  {data.map((row, index) => (
+                    <TableRow key={row.name}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{Avatars[row.avatarIndex]}</TableCell>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{row.gender}</TableCell>
+                      <TableCell>{row.medicalInfo}</TableCell>
+                      <TableCell>{moment(row.dob).format('MM/DD/YYYY')}</TableCell>
+                      <TableCell>{row.address}</TableCell>
+                      <TableCell>{row.city}</TableCell>
+                      <TableCell>{row.country}</TableCell>
+                      <TableCell>{row.qr}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              ) : (
+                <TableRow>
+                  <Box
+                    component={"div"}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 200,
+                      width: "100%",
+                      position: "absolute",
+                    }}
+                  >
+                    No records found
+                  </Box>
+                </TableRow>
+              )}
+            </Table>
+          </Sheet>
+        </Grid>
+      </Grid>
       <Modal
         open={modalToggle}
         onClose={() => setModalToggle(false)}
@@ -33,7 +122,8 @@ function App() {
           flex: 1,
         }}
       >
-        <FormBody />
+        <FormBody setModalToggle={setModalToggle} />
+        {/* <QRCodeSVG value="https://reactjs.org/" /> */}
       </Modal>
     </Paper>
   );

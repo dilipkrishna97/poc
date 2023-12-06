@@ -11,12 +11,15 @@ import {
 } from "../Constants";
 import { Styles } from "./styles";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { addChildDetails } from "../Store/action";
 
-function FormBody() {
+function FormBody({ setModalToggle }) {
   const styles = Styles();
   const imageRef = useRef(null);
+  const dispatch = useDispatch();
   const [addEnable, setAddEnable] = useState(false);
-  const [ formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     gender: "",
     dob: "",
@@ -208,7 +211,10 @@ function FormBody() {
                 Date Of Birth
               </Box>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker onChange={dateChange} maxDate={moment()} />
+                <DatePicker
+                  onChange={dateChange}
+                  maxDate={moment(new Date())}
+                />
               </LocalizationProvider>
             </Box>
           </Box>
@@ -323,6 +329,17 @@ function FormBody() {
             fullWidth
             disabled={!addEnable}
             //   className="addButton"
+            onClick={() => {
+              if (addEnable) {
+                dispatch(
+                  addChildDetails({
+                    ...formData,
+                    address: `${formData.addressLine1}\n${formData.addressLine2}\n${formData.postalCode}`,
+                  })
+                );
+                setModalToggle(false);
+              }
+            }}
             style={{ margin: "10px 0px", borderRadius: 10, color: "#FFF" }}
           >
             Add
