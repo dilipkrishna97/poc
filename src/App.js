@@ -43,15 +43,7 @@ function App() {
   }
 
   return (
-    <Paper
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
+    <Paper style={useStyles.paperStyle}>
       <Grid md={12} width={"100%"} height={"100%"}>
         <Grid
           md={12}
@@ -98,9 +90,20 @@ function App() {
                     <TableRow key={row.name}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>
-                        {avatarWithBackground(
-                          Avatars[row.avatarIndex],
-                          row.profileColor
+                        {row?.avatarImage ? (
+                          <img
+                            src={URL.createObjectURL(row?.avatarImage)}
+                            alt="Selected Avatar"
+                            style={{
+                              ...useStyles.avatarSelectedStyle,
+                              backgroundColor: row.profileColor ?? "#FFF",
+                            }}
+                          />
+                        ) : (
+                          avatarWithBackground(
+                            Avatars[row.avatarIndex],
+                            row.profileColor
+                          )
                         )}
                       </TableCell>
                       <TableCell>{row.name}</TableCell>
@@ -120,17 +123,7 @@ function App() {
                 </TableBody>
               ) : (
                 <TableRow>
-                  <Box
-                    component={"div"}
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: 200,
-                      width: "100%",
-                      position: "absolute",
-                    }}
-                  >
+                  <Box component={"div"} style={useStyles.tableDivStyle}>
                     No records found
                   </Box>
                 </TableRow>
@@ -142,12 +135,7 @@ function App() {
       <Modal
         open={modalToggle}
         onClose={() => setModalToggle(false)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-        }}
+        style={useStyles.modalStyle}
       >
         <FormBody setModalToggle={setModalToggle} />
       </Modal>
@@ -156,3 +144,39 @@ function App() {
 }
 
 export default App;
+
+const useStyles = {
+  paperStyle: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100vw",
+    height: "100vh",
+  },
+  modalStyle: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  avatarSelectedStyle: {
+    position: "relative",
+    bottom: 0,
+    right: -5,
+    height: 40,
+    width: 40,
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#000",
+  },
+  tableDivStyle: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 200,
+    width: "100%",
+    position: "absolute",
+  },
+};

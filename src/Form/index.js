@@ -70,7 +70,9 @@ function FormBody() {
     if (
       !Boolean(
         Object.keys(formData).find((item) => {
-          if (!Boolean(formData[item])) {
+          if (item === "avatarIndex" && !(formData[item] > -1)) {
+            return item;
+          } else if (item !== "avatarIndex" && !Boolean(formData[item])) {
             return item;
           }
           return null;
@@ -89,21 +91,20 @@ function FormBody() {
       className={success ? styles.qrContainer : styles.formContainer}
     >
       {success ? (
-        <QRCodeSVG value={formData.name} size={130} />
+        <Box component={"div"} className={styles.qrInnerContainer}>
+          {"Children Details QR"}
+          <QRCodeSVG
+            value={formData.name}
+            size={130}
+            className={styles.qrSvgStyle}
+          />
+        </Box>
       ) : (
         <>
           <Box component={"div"} className={styles.addDetailsText}>
             {"Add children details"}
           </Box>
-          <Box
-            component="div"
-            style={{
-              overflowY: "scroll",
-              border: "1px solid #3A3A3A",
-              height: "90%",
-              // borderRadius: 10,
-            }}
-          >
+          <Box component="div" className={styles.formSubContainer}>
             <Box className={styles.formInnerContainer} component="form">
               <Box
                 className={[styles.avatarOuterContainer, styles.labelStyles]}
@@ -112,14 +113,17 @@ function FormBody() {
                 <Box className={styles.avatarsContainer}>
                   {Avatars.map((Avatar, index) => (
                     <Box
+                      key={index}
                       component={"div"}
                       className={styles.avatarStyles}
                       onClick={() => {
                         if (index !== 0) {
                           setFormData({ ...formData, avatarIndex: index });
                         }
-                        if (index === 0) {
+                        if (index === 0 && !formData.avatarImage) {
                           imageRef.current.click();
+                        } else if (index === 0 && formData.avatarImage) {
+                          setFormData({ ...formData, avatarIndex: index });
                         }
                       }}
                       style={{
@@ -129,44 +133,43 @@ function FormBody() {
                     >
                       {Avatar}
                       {!!(
-                        formData.avatarIndex &&
                         !isNaN(formData.avatarIndex) &&
                         formData.avatarIndex === index
                       ) && (
                         <Box
                           component={"div"}
-                          style={{
-                            position: "absolute",
-                            bottom: 0,
-                            right: -5,
-                            height: 20,
-                            width: 20,
-                            borderRadius: "50%",
-                            backgroundColor: "#ededed",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
+                          className={styles.avatarInnerStyle}
                         >
                           <DoneIcon sx={{ fontSize: 20 }} htmlColor="#04aa6d" />
                         </Box>
                       )}
-                      <input
-                        hidden
-                        key={"input "}
-                        onChange={(e) => {
-                          setFormData({
-                            ...formData,
-                            avatarImage: e.target.files[0],
-                          });
-                        }}
-                        ref={imageRef}
-                        type="file"
-                        accept="image/*"
-                      />
+                      {index === 0 && formData.avatarImage && (
+                        <img
+                          src={URL.createObjectURL(formData.avatarImage)}
+                          alt="Selected Avatar"
+                          className={styles.avatarSelectedStyle}
+                          style={{
+                            backgroundColor: formData.profileColor ?? "#FFF",
+                          }}
+                        />
+                      )}
                     </Box>
                   ))}
                 </Box>
+                <input
+                  hidden
+                  key={"input "}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      avatarImage: e.target.files[0],
+                      avatarIndex: 0,
+                    });
+                  }}
+                  ref={imageRef}
+                  type="file"
+                  accept="image/*"
+                />
               </Box>
               <Box component={"div"} className={styles.avatarOuterContainer}>
                 <Box component={"div"} className={styles.labelStyles}>
@@ -175,11 +178,12 @@ function FormBody() {
                 <TextField
                   variant="filled"
                   size="small"
+                  color="none"
                   fullWidth
                   placeholder="Enter your name"
                   onChange={(value) => inputChange(value, "name")}
                   value={formData.name}
-                  style={{ marginTop: 10 }}
+                  className={styles.nameTextStyle}
                 />
               </Box>
               <Box component={"div"} className={styles.genderDobContainer}>
@@ -220,8 +224,7 @@ function FormBody() {
                 <Box component={"div"} className={styles.dobLabelStyles}>
                   <Box
                     component={"div"}
-                    className={styles.labelStyles}
-                    style={{ marginBottom: 10 }}
+                    className={[styles.labelStyles, styles.dobTextStyle]}
                   >
                     Date Of Birth
                   </Box>
@@ -240,12 +243,13 @@ function FormBody() {
                 <TextField
                   variant="filled"
                   size="small"
+                  color="none"
                   select
                   fullWidth
                   defaultValue={"Allergy"}
                   onChange={(value) => inputChange(value, "medicalInfo")}
                   value={formData.medicalInfo}
-                  style={{ marginTop: 10 }}
+                  className={styles.medicalInfoText}
                 >
                   {MedicalInfoOptions.map((option) => (
                     <MenuItem key={option} value={option} color={"#000"}>
@@ -261,29 +265,32 @@ function FormBody() {
                 <TextField
                   variant="filled"
                   size="small"
+                  color="none"
                   fullWidth
                   placeholder="Address line 1"
                   onChange={(value) => inputChange(value, "addressLine1")}
-                  style={{ marginTop: 10 }}
+                  className={styles.addressTextStyle}
                 />
                 <TextField
                   variant="filled"
                   size="small"
+                  color="none"
                   fullWidth
                   placeholder="Address line 2"
                   onChange={(value) => inputChange(value, "addressLine2")}
-                  style={{ marginTop: 10 }}
+                  className={styles.addressTextStyle}
                 />
                 <TextField
                   variant="filled"
                   size="small"
+                  color="none"
                   select
                   fullWidth
                   placeholder="Postal Code"
                   defaultValue={""}
                   onChange={(value) => inputChange(value, "postalCode")}
                   value={formData.postalCode}
-                  style={{ marginTop: 10 }}
+                  className={styles.addressTextStyle}
                 >
                   {PostalCodeOptions.map((option) => (
                     <MenuItem key={option} value={option} color={"#000"}>
@@ -295,18 +302,20 @@ function FormBody() {
                   <TextField
                     variant="filled"
                     size="small"
+                    color="none"
                     fullWidth
                     placeholder="City"
                     onChange={(value) => inputChange(value, "city")}
-                    style={{ marginTop: 10, width: "47%" }}
+                    className={styles.cityCountryField}
                   />
                   <TextField
                     variant="filled"
                     size="small"
+                    color="none"
                     fullWidth
                     placeholder="Country"
                     onChange={(value) => inputChange(value, "country")}
-                    style={{ marginTop: 10, width: "47%" }}
+                    className={styles.cityCountryField}
                   />
                 </Box>
               </Box>
@@ -314,14 +323,7 @@ function FormBody() {
                 <Box component={"div"} className={styles.labelStyles}>
                   {"Select an children profile background color"}
                 </Box>
-                <Box
-                  component={"div"}
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    marginTop: 10,
-                  }}
-                >
+                <Box component={"div"} className={styles.colorSelectorMain}>
                   {BackGroundColors.map((color, index) => (
                     <Box
                       component={"div"}
@@ -345,7 +347,7 @@ function FormBody() {
                 variant="contained"
                 fullWidth
                 disabled={!addEnable}
-                //   className="addButton"
+                className={styles.addButtonStyles}
                 onClick={async () => {
                   if (addEnable) {
                     await addChild();
@@ -358,7 +360,6 @@ function FormBody() {
                     setSuccess(true);
                   }
                 }}
-                style={{ margin: "10px 0px", borderRadius: 10, color: "#FFF" }}
               >
                 Add
               </Button>
@@ -366,7 +367,7 @@ function FormBody() {
                 variant="contained"
                 fullWidth
                 disabled={true}
-                style={{ borderRadius: 10, color: "#FFF" }}
+                className={styles.addButton}
               >
                 Select Package
               </Button>
