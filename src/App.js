@@ -16,14 +16,32 @@ import Sheet from "@mui/joy/Sheet";
 import { useSelector } from "react-redux";
 import { Avatars } from "./Constants";
 import moment from "moment";
+import { Styles } from "./Form/styles";
+import { QRCodeSVG } from "qrcode.react";
 
 function App() {
   const [modalToggle, setModalToggle] = useState(false);
   const data = useSelector((state) => state.childrenDetails.childrenDetails);
-
+  const styles = Styles();
   function addChild() {
     setModalToggle(!modalToggle);
   }
+
+  function avatarWithBackground(avatar, color) {
+    return (
+      <Box
+        component={"div"}
+        className={styles.avatarStyles}
+        style={{
+          backgroundColor: color ?? "#FFF",
+          position: "relative",
+        }}
+      >
+        {avatar}
+      </Box>
+    );
+  }
+
   return (
     <Paper
       style={{
@@ -79,15 +97,24 @@ function App() {
                   {data.map((row, index) => (
                     <TableRow key={row.name}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell>{Avatars[row.avatarIndex]}</TableCell>
+                      <TableCell>
+                        {avatarWithBackground(
+                          Avatars[row.avatarIndex],
+                          row.profileColor
+                        )}
+                      </TableCell>
                       <TableCell>{row.name}</TableCell>
                       <TableCell>{row.gender}</TableCell>
                       <TableCell>{row.medicalInfo}</TableCell>
-                      <TableCell>{moment(row.dob).format('MM/DD/YYYY')}</TableCell>
+                      <TableCell>
+                        {moment(row.dob).format("MM/DD/YYYY")}
+                      </TableCell>
                       <TableCell>{row.address}</TableCell>
                       <TableCell>{row.city}</TableCell>
                       <TableCell>{row.country}</TableCell>
-                      <TableCell>{row.qr}</TableCell>
+                      <TableCell>
+                        <QRCodeSVG value={row.name} size={30} />;
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -123,7 +150,6 @@ function App() {
         }}
       >
         <FormBody setModalToggle={setModalToggle} />
-        {/* <QRCodeSVG value="https://reactjs.org/" /> */}
       </Modal>
     </Paper>
   );

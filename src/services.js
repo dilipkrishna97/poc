@@ -7,8 +7,9 @@ import http from "./ApiConfig";
 // };
 
 export const addChild = (data) => {
-    // make the actual api call to get the response
+  // make the actual api call to get the response
   return new Promise((resolve, reject) => {
+    console.info("data", data);
     setTimeout(() => {
       resolve("The child details have been saved.");
     }, 2000);

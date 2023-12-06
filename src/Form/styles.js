@@ -1,6 +1,15 @@
 import { makeStyles } from "@mui/styles";
 
 export const Styles = makeStyles(() => ({
+  qrContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FAFAFA",
+    padding: 10,
+    border: "5px solid black",
+    borderRadius: 10,
+  },
   formContainer: {
     backgroundColor: "#FAFAFA",
     borderRadius: 10,
