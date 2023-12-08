@@ -50,8 +50,8 @@ function App() {
           sx={{ height: "15%", width: "100%", p: 2, alignItems: "center" }}
           display="flex"
         >
-          <Box component={"div"} sx={{ width: { md: "80%", xs: "100%" } }}>
-            Header
+          <Box component={"div"} sx={{ width: { md: "80%", xs: "100%" },fontSize: 40, fontWeight: '600', textDecorationLine:'underline' }}>
+            Children Details
           </Box>
           <Button
             variant="contained"
@@ -76,11 +76,11 @@ function App() {
                   <TableCell>Avatar</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Gender</TableCell>
-                  <TableCell>Medical Info</TableCell>
-                  <TableCell>DOB</TableCell>
-                  <TableCell>Address</TableCell>
-                  <TableCell>City</TableCell>
-                  <TableCell>Country</TableCell>
+                  {/* <TableCell>Medical Info</TableCell> */}
+                  {/* <TableCell>DOB</TableCell> */}
+                  {/* <TableCell>Address</TableCell> */}
+                  {/* <TableCell>City</TableCell> */}
+                  {/* <TableCell>Country</TableCell> */}
                   <TableCell>QR</TableCell>
                 </TableRow>
               </TableHead>
@@ -108,15 +108,15 @@ function App() {
                       </TableCell>
                       <TableCell>{row.name}</TableCell>
                       <TableCell>{row.gender}</TableCell>
-                      <TableCell>{row.medicalInfo}</TableCell>
-                      <TableCell>
+                      {/* <TableCell>{row.medicalInfo}</TableCell> */}
+                      {/* <TableCell>
                         {moment(row.dob).format("MM/DD/YYYY")}
-                      </TableCell>
-                      <TableCell>{row.address}</TableCell>
-                      <TableCell>{row.city}</TableCell>
-                      <TableCell>{row.country}</TableCell>
+                      </TableCell> */}
+                      {/* <TableCell>{row.address}</TableCell> */}
+                      {/* <TableCell>{row.city}</TableCell> */}
+                      {/* <TableCell>{row.country}</TableCell> */}
                       <TableCell>
-                        <QRCodeSVG value={row.name} size={30} />;
+                        <QRCodeSVG value={row.name} size={30} />
                       </TableCell>
                     </TableRow>
                   ))}
