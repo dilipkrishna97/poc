@@ -14,3 +14,16 @@ export const BackGroundColors = [
 ];
 
 export const Avatars = [<AddIcon />, <FaceIcon />, <Face2Icon />];
+
+export const TableHeader = [
+  "Sl No.",
+  "Avatar",
+  "Name",
+  "Gender",
+  "Medical Info",
+  "DOB",
+  "Address",
+  "City",
+  "Country",
+  "QR",
+];

@@ -117,7 +117,7 @@ export const Styles = makeStyles(() => ({
     color: "#FFF",
   },
   selectButtonStyles: { borderRadius: 10, color: "#FFF" },
-  cityCountryContainer: { display: "flex", justifyContent: "space-between" },
+  cityCountryContainer: { display: "flex", justifyContent: "space-between", flex:1 },
   cityCountryField: {
     marginTop: "10px !important",
     width: "47% !important",
